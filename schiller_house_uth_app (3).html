@@ -1,0 +1,798 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Schiller House · UTH Ledger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --felt:#12332b;
+  --felt-deep:#0b2119;
+  --felt-line:#2a5245;
+  --paper:#f4efe2;
+  --card:#fffdf7;
+  --ink:#201c14;
+  --muted:#7a715e;
+  --line:#e3dac4;
+  --gold:#a97f24;
+  --gold-deep:#8a6a1f;
+  --gold-wash:#f1e5c4;
+  --brick:#95392f;
+  --brick-wash:#f4e0dc;
+  --green-wash:#e2ece3;
+  --shadow:0 2px 10px rgba(18,51,43,.08);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--paper);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+}
+.serif{font-family:'Fraunces',Georgia,serif}
+.num{font-variant-numeric:tabular-nums}
+a{color:inherit}
+
+/* ---------- header ---------- */
+header{
+  background:linear-gradient(180deg,var(--felt) 0%,var(--felt-deep) 100%);
+  color:#f4efe2;
+  padding:28px 24px 0;
+  position:sticky;top:0;z-index:5;
+  border-bottom:3px solid var(--gold);
+}
+.wrap{max-width:1120px;margin:auto}
+.brand{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.brand .mark{
+  font-size:22px;color:var(--gold);line-height:1;
+}
+h1{
+  margin:0;font-size:28px;font-weight:600;font-family:'Fraunces',Georgia,serif;
+  letter-spacing:.2px;
+}
+header .tagline{
+  margin:6px 0 20px;color:#c9c0a8;font-size:14px;font-style:italic;font-family:'Fraunces',Georgia,serif;
+}
+nav{display:flex;gap:4px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.tabs{display:flex;gap:2px;flex-wrap:wrap}
+button{
+  border:0;cursor:pointer;font-family:inherit;font-weight:600;font-size:14px;
+}
+.tab{
+  background:transparent;color:#c9c0a8;padding:10px 16px;border-radius:8px 8px 0 0;
+  border-bottom:2px solid transparent;
+}
+.tab:hover{color:#f4efe2}
+.tab.active{color:#f4efe2;border-bottom:2px solid var(--gold);background:rgba(244,239,226,.06)}
+.primary{
+  background:var(--gold);color:#241a05;padding:10px 18px;border-radius:8px;
+  box-shadow:0 1px 0 rgba(0,0,0,.15);
+}
+.primary:hover{background:#b78d33}
+.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);padding:9px 15px;border-radius:8px}
+.ghost:hover{border-color:var(--gold-deep);color:var(--gold-deep)}
+.danger{background:transparent;color:var(--brick);border:1px solid var(--brick-wash);padding:8px 13px;border-radius:8px}
+.danger:hover{background:var(--brick-wash)}
+.nav-cta{padding-bottom:14px}
+
+/* ---------- layout ---------- */
+main{padding:28px 24px 60px}
+main>div.hidden{display:none}
+section{margin-top:24px}
+h2{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:21px;margin:0}
+h3{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:17px;margin:26px 0 12px}
+.muted{color:var(--muted)}
+.subtle{color:var(--muted);font-size:13.5px;margin-top:4px}
+.row{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:14px;
+  padding:20px;box-shadow:var(--shadow);
+}
+
+/* ---------- stat tiles ---------- */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.stat{
+  background:var(--card);border:1px solid var(--line);border-top:3px solid var(--gold);
+  border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);
+}
+.stat .suit{font-size:15px;color:var(--gold-deep)}
+.stat small{color:var(--muted);display:block;margin-top:2px;font-size:12.5px}
+.stat strong{
+  font-size:28px;display:block;margin-top:8px;font-family:'Fraunces',Georgia,serif;font-weight:600;
+}
+
+/* ---------- ledger rows (sessions) ---------- */
+.ledger-row{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  padding:14px 4px;border-bottom:1px solid var(--line);cursor:pointer;
+}
+.ledger-row:last-child{border-bottom:0}
+.ledger-row:hover .ledger-name{color:var(--gold-deep)}
+.ledger-main{display:flex;align-items:flex-start;gap:12px;min-width:0}
+.ledger-bar{width:4px;align-self:stretch;border-radius:3px;flex-shrink:0}
+.ledger-bar.up{background:var(--gold)}
+.ledger-bar.down{background:var(--brick)}
+.ledger-name{font-weight:600}
+.tagset{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px}
+.tag{
+  font-size:12px;color:var(--muted);background:var(--green-wash);border-radius:6px;padding:2px 8px;
+}
+.ledger-figure{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:18px;white-space:nowrap}
+.ledger-actions{display:flex;gap:8px;align-items:center}
+.list-empty{color:var(--muted);font-style:italic;padding:12px 4px;font-family:'Fraunces',Georgia,serif}
+
+/* ---------- values ---------- */
+.up{color:#5a7a37}
+.down{color:var(--brick)}
+
+/* ---------- chart card ---------- */
+canvas{width:100%;height:300px;display:block}
+.chart-card{padding-bottom:14px}
+.chart-wrap{position:relative}
+.chart-tooltip{
+  position:absolute;pointer-events:none;background:var(--felt);color:#f4efe2;
+  padding:7px 11px;border-radius:8px;box-shadow:var(--shadow);
+  transform:translate(-50%,-115%);white-space:nowrap;opacity:0;
+  transition:opacity .08s ease;z-index:5;border:1px solid var(--gold);
+}
+.chart-tooltip.show{opacity:1}
+.chart-tooltip .tt-label{font-family:'Fraunces',Georgia,serif;font-style:italic;color:#c9c0a8;font-size:11.5px;display:block}
+.chart-tooltip .tt-value{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:14.5px}
+
+/* ---------- players table ---------- */
+table{width:100%;border-collapse:collapse;margin-top:4px}
+th,td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left}
+th{font-size:12.5px;color:var(--muted);font-weight:600}
+td.rank{color:var(--gold-deep);font-family:'Fraunces',Georgia,serif;font-weight:600;width:34px}
+tr:last-child td{border-bottom:0}
+
+/* ---------- forms ---------- */
+label{font-size:12.5px;font-weight:600;color:#4d4636;display:block;margin-bottom:5px}
+input,select{
+  width:100%;padding:10px 12px;border:1px solid #d8cfb6;border-radius:8px;font:inherit;
+  background:#fffefb;color:var(--ink);
+}
+input:focus,select:focus,button:focus-visible{
+  outline:2px solid var(--gold-deep);outline-offset:1px;border-color:var(--gold-deep);
+}
+.formgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;align-items:end}
+.formgrid .wide{grid-column:span 2}
+.entry-row{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  padding:10px 0;border-bottom:1px solid var(--line);
+}
+.entry-row:last-child{border-bottom:0}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:600}
+.pill.up-pill{color:#3f5a24;background:var(--green-wash)}
+.pill.down-pill{color:var(--brick);background:var(--brick-wash)}
+.net-banner{
+  margin-top:14px;background:var(--felt);color:#f4efe2;border-radius:12px;padding:14px 18px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.net-banner strong.figure{font-family:'Fraunces',Georgia,serif;font-size:22px}
+.actions{display:flex;gap:8px}
+.select-wrap{max-width:260px}
+.empty-hint{color:var(--muted);font-style:italic;font-family:'Fraunces',Georgia,serif;padding:16px 4px}
+
+/* ---------- responsive ---------- */
+@media(max-width:820px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .formgrid{grid-template-columns:1fr 1fr}
+  .formgrid .wide{grid-column:span 2}
+}
+@media(max-width:560px){
+  header{padding:20px 16px 0}
+  main{padding:18px 16px 48px}
+  h1{font-size:23px}
+  .stats{grid-template-columns:1fr 1fr;gap:10px}
+  .stat strong{font-size:22px}
+  .formgrid{grid-template-columns:1fr}
+  .formgrid .wide{grid-column:span 1}
+  th:nth-child(2),td:nth-child(2){display:none}
+  .card{padding:16px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+<div class="wrap">
+  <div class="brand"><span class="mark">♠</span><h1>Schiller House</h1></div>
+  <p class="tagline">The Ultimate Texas Hold'em ledger — house results and player standings</p>
+  <nav>
+    <div class="tabs">
+      <button type="button" class="tab active" data-tab="dashboard">Dashboard</button>
+      <button type="button" class="tab" data-tab="sessions">Sessions</button>
+      <button type="button" class="tab" data-tab="players">Players</button>
+      <button type="button" class="tab" data-tab="graphs">Graphs</button>
+    </div>
+    <div class="nav-cta"><button type="button" class="primary" data-action="new-session">New session</button></div>
+  </nav>
+</div>
+</header>
+<main class="wrap">
+
+<div id="dashboard">
+  <section class="stats">
+    <div class="stat"><span class="suit">♦</span><small>House profit</small><strong id="totalProfit" class="num">$0</strong></div>
+    <div class="stat"><span class="suit">♣</span><small>Profitability ratio</small><strong id="profitRatio" class="num">0%</strong></div>
+    <div class="stat"><span class="suit">♠</span><small>Ledger entries</small><strong id="txnCount" class="num">0</strong></div>
+    <div class="stat"><span class="suit">♥</span><small>Players tracked</small><strong id="playerCount" class="num">0</strong></div>
+  </section>
+  <section class="card">
+    <div class="row">
+      <div><h2>Recent sessions</h2><div class="subtle">Open a session to see its full ledger.</div></div>
+      <button type="button" class="ghost" data-tab="sessions">View all</button>
+    </div>
+    <div id="recent" style="margin-top:6px"></div>
+  </section>
+  <section class="card chart-card">
+    <h2>Cumulative house profit</h2>
+    <div class="chart-wrap">
+      <canvas id="dashChart"></canvas>
+      <div class="chart-tooltip" id="dashTooltip"></div>
+    </div>
+  </section>
+</div>
+
+<div id="sessions" class="hidden">
+  <section class="card">
+    <div class="row">
+      <div><h2>Sessions</h2><div class="subtle">Each session holds the house Up/Down ledger and every player's result.</div></div>
+      <button type="button" class="primary" data-action="new-session">New session</button>
+    </div>
+    <div id="sessionList" style="margin-top:6px"></div>
+  </section>
+</div>
+
+<div id="players" class="hidden">
+  <section class="card">
+    <div class="row">
+      <div><h2>Players</h2><div class="subtle">Lifetime results across every recorded session, ranked by net. Session-by-session splits carried over from the old notes are estimates — lifetime totals match the original record.</div></div>
+    </div>
+    <div id="playerList" style="margin-top:6px"></div>
+  </section>
+</div>
+
+<div id="graphs" class="hidden">
+  <section class="card chart-card">
+    <div class="row">
+      <h2>Graphs</h2>
+      <div class="select-wrap"><select id="graphSelect">
+        <option value="cumulative">Cumulative house profit</option>
+        <option value="session">Profit / loss by session</option>
+        <option value="players">Player lifetime net</option>
+      </select></div>
+    </div>
+    <div class="chart-wrap" style="margin-top:10px">
+      <canvas id="mainChart"></canvas>
+      <div class="chart-tooltip" id="mainTooltip"></div>
+    </div>
+  </section>
+</div>
+
+<div id="editor" class="hidden">
+  <section class="card">
+    <div class="row">
+      <div><h2 id="editorTitle">New session</h2><div class="subtle">Record the house ledger first, then each player's result.</div></div>
+      <div class="actions">
+        <button type="button" class="ghost" data-action="close-editor">Cancel</button>
+        <button type="button" class="primary" data-action="save-session">Save session</button>
+      </div>
+    </div>
+
+    <div class="formgrid" style="grid-template-columns:1fr 3fr;margin-top:16px">
+      <div><label for="sName">Session</label><input id="sName" placeholder="Session #25"></div>
+      <div><label for="sNotes">Notes</label><input id="sNotes" placeholder="Optional notes"></div>
+    </div>
+
+    <h3>House ledger</h3>
+    <div class="formgrid">
+      <div><label for="tDir">Direction</label><select id="tDir"><option value="Up">Up</option><option value="Down">Down</option></select></div>
+      <div><label for="tAmt">Amount</label><input id="tAmt" type="number" min="0" step="1" placeholder="100"></div>
+      <div><label for="tDesc">Description</label><input id="tDesc" placeholder="Optional"></div>
+      <div><button type="button" class="ghost" style="width:100%" data-action="add-txn">Add entry</button></div>
+    </div>
+    <div id="txnEditor"></div>
+    <div class="net-banner"><span>Session net</span><strong id="editNet" class="figure num">$0</strong></div>
+
+    <h3>Player data</h3>
+    <div class="formgrid">
+      <div><label for="pName">Player</label>
+        <div style="display:flex;gap:6px">
+          <select id="pName" style="flex:1"></select>
+          <button type="button" class="ghost" style="padding:0 14px" data-action="new-player-name" title="Add a new player">+</button>
+        </div>
+      </div>
+      <div><label for="pBuy">Buy-in</label><input id="pBuy" type="number" min="0" step="1" placeholder="200"></div>
+      <div><label for="pCash">Cash-out</label><input id="pCash" type="number" min="0" step="1" placeholder="350"></div>
+      <div><label for="pNote">Notes</label><input id="pNote" placeholder="Optional"></div>
+    </div>
+    <button type="button" class="ghost" style="margin-top:12px" data-action="add-player">Add player</button>
+    <div id="playerEditor"></div>
+  </section>
+</div>
+
+</main>
+<script>
+'use strict';
+
+const KEY='schillerHouseUTH_v2_seeded';
+const SEED_DB={"sessions":[{"id":"import-01","name":"Session #1","date":"2026-07-28","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Down","amount":258,"desc":"Imported house result"}],"players":[{"name":"Cooper","buy":250,"cash":252,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Griffin","buy":125,"cash":105,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Ilan","buy":175,"cash":154,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Russell","buy":275,"cash":274,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-02","name":"Session #2","date":"2026-07-29","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":62,"desc":"Imported house result"}],"players":[{"name":"Coby","buy":300,"cash":307,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Parker","buy":125,"cash":105,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Preston","buy":600,"cash":180,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-03","name":"Session #3","date":"2026-07-30","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Down","amount":237,"desc":"Imported house result"}],"players":[{"name":"Corbett","buy":150,"cash":185,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Josh Davis","buy":225,"cash":212,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Khan","buy":300,"cash":272,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Zach","buy":300,"cash":274,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-04","name":"Session #4","date":"2026-07-31","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":650,"desc":"Imported house result"}],"players":[{"name":"Julian","buy":125,"cash":103,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Katz","buy":275,"cash":152,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Shechter","buy":100,"cash":108,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Steck","buy":200,"cash":96,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-05","name":"Session #5","date":"2026-08-01","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Down","amount":574,"desc":"Imported house result"}],"players":[{"name":"Fink","buy":300,"cash":366,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Nate","buy":225,"cash":190,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Ty","buy":225,"cash":219,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-06","name":"Session #6","date":"2026-08-02","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":1155,"desc":"Imported house result"}],"players":[{"name":"Gitken","buy":225,"cash":199,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Roytburd","buy":125,"cash":143,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Shimony","buy":100,"cash":88,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-07","name":"Session #7","date":"2026-08-03","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Down","amount":100,"desc":"Imported house result"}],"players":[{"name":"Joe","buy":100,"cash":156,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Preston","buy":725,"cash":250,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Russell","buy":300,"cash":302,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Sam Burgy","buy":125,"cash":125,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-08","name":"Session #8","date":"2026-08-04","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Down","amount":209,"desc":"Imported house result"}],"players":[{"name":"Austin","buy":100,"cash":142,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Bellew","buy":250,"cash":275,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Griffin","buy":150,"cash":142,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Steck","buy":250,"cash":167,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-09","name":"Session #9","date":"2026-08-05","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":920,"desc":"Imported house result"}],"players":[{"name":"Cooper","buy":100,"cash":105,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Joe","buy":250,"cash":277,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Sam Burgy","buy":275,"cash":259,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-10","name":"Session #10","date":"2026-08-06","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":100,"desc":"Imported house result"}],"players":[{"name":"Joe","buy":125,"cash":150,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Josh Davis","buy":175,"cash":144,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Ty","buy":150,"cash":154,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Zach","buy":225,"cash":190,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-11","name":"Session #11","date":"2026-08-07","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":35,"desc":"Imported house result"}],"players":[{"name":"Julian","buy":150,"cash":132,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Khan","buy":100,"cash":76,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Preston","buy":425,"cash":105,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Russell","buy":200,"cash":205,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-12","name":"Session #12","date":"2026-08-08","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":50,"desc":"Imported house result"}],"players":[{"name":"Coby","buy":200,"cash":197,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Parker","buy":150,"cash":136,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Steck","buy":325,"cash":262,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-13","name":"Session #13","date":"2026-08-09","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":286,"desc":"Imported house result"}],"players":[{"name":"Fink","buy":100,"cash":144,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Gitken","buy":125,"cash":114,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Roytburd","buy":200,"cash":207,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-14","name":"Session #14","date":"2026-08-10","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":220,"desc":"Imported house result"}],"players":[{"name":"Joe","buy":100,"cash":142,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Katz","buy":225,"cash":102,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Shechter","buy":100,"cash":114,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Shimony","buy":200,"cash":190,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-15","name":"Session #15","date":"2026-08-11","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":50,"desc":"Imported house result"}],"players":[{"name":"Austin","buy":200,"cash":237,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Corbett","buy":100,"cash":124,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Josh Davis","buy":300,"cash":273,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-16","name":"Session #16","date":"2026-08-12","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":25,"desc":"Imported house result"}],"players":[{"name":"Bellew","buy":150,"cash":171,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Cooper","buy":300,"cash":306,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Griffin","buy":150,"cash":145,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Ty","buy":200,"cash":193,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-17","name":"Session #17","date":"2026-08-13","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Down","amount":180,"desc":"Imported house result"}],"players":[{"name":"Coby","buy":125,"cash":126,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Ilan","buy":150,"cash":109,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Nate","buy":175,"cash":160,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-18","name":"Session #18","date":"2026-08-14","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Down","amount":183,"desc":"Imported house result"}],"players":[{"name":"Fink","buy":125,"cash":246,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Julian","buy":275,"cash":274,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Khan","buy":200,"cash":164,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Zach","buy":225,"cash":211,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-19","name":"Session #19","date":"2026-08-15","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":125,"desc":"Imported house result"}],"players":[{"name":"Joe","buy":300,"cash":336,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Katz","buy":350,"cash":260,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Preston","buy":575,"cash":136,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Shechter","buy":150,"cash":162,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-20","name":"Session #20","date":"2026-08-16","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":70,"desc":"Imported house result"}],"players":[{"name":"Gitken","buy":275,"cash":252,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Roytburd","buy":175,"cash":174,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Sam Burgy","buy":200,"cash":208,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-21","name":"Session #21","date":"2026-08-17","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Down","amount":90,"desc":"Imported house result"}],"players":[{"name":"Corbett","buy":300,"cash":335,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Russell","buy":250,"cash":268,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Steck","buy":200,"cash":131,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-22","name":"Session #22","date":"2026-08-18","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":50,"desc":"Imported house result"}],"players":[{"name":"Coby","buy":200,"cash":193,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Ilan","buy":175,"cash":155,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Parker","buy":150,"cash":150,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-23","name":"Session #23","date":"2026-08-19","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":2,"desc":"Imported house result"}],"players":[{"name":"Nate","buy":125,"cash":117,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Shimony","buy":200,"cash":179,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Ty","buy":125,"cash":140,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-24","name":"Session #24","date":"2026-08-20","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":100,"desc":"Imported house result"}],"players":[{"name":"Bellew","buy":125,"cash":127,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Cooper","buy":250,"cash":259,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Roytburd","buy":300,"cash":307,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-25","name":"Session #25","date":"2026-08-21","notes":"Imported from Schiller House Notes. Original house entry: Net 0.","txns":[{"dir":"Net","amount":0,"desc":"Imported house result"}],"players":[{"name":"Fink","buy":300,"cash":381,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Julian","buy":125,"cash":107,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Shechter","buy":100,"cash":102,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-26","name":"Session #26","date":"2026-08-22","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":100,"desc":"Imported house result"}],"players":[{"name":"Gitken","buy":225,"cash":181,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Josh Davis","buy":125,"cash":111,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Khan","buy":275,"cash":253,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-27","name":"Session #27","date":"2026-08-23","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":20,"desc":"Imported house result"}],"players":[{"name":"Austin","buy":200,"cash":227,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Bellew","buy":150,"cash":157,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Katz","buy":350,"cash":250,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Shimony","buy":125,"cash":118,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-28","name":"Session #28","date":"2026-08-24","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":466,"desc":"Imported house result"}],"players":[{"name":"Nate","buy":200,"cash":174,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Preston","buy":625,"cash":184,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Roytburd","buy":275,"cash":265,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-29","name":"Session #29","date":"2026-08-25","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Down","amount":60,"desc":"Imported house result"}],"players":[{"name":"Corbett","buy":200,"cash":231,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Griffin","buy":100,"cash":104,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Steck","buy":175,"cash":93,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Ty","buy":125,"cash":130,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-30","name":"Session #30","date":"2026-08-26","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Down","amount":104,"desc":"Imported house result"}],"players":[{"name":"Bellew","buy":100,"cash":107,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Fink","buy":250,"cash":279,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Sam Burgy","buy":150,"cash":131,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Zach","buy":150,"cash":108,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-31","name":"Session #31","date":"2026-08-27","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Down","amount":203,"desc":"Imported house result"}],"players":[{"name":"Austin","buy":300,"cash":322,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Cooper","buy":150,"cash":145,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Julian","buy":150,"cash":127,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-32","name":"Session #32","date":"2026-08-28","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":78,"desc":"Imported house result"}],"players":[{"name":"Coby","buy":200,"cash":199,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Gitken","buy":200,"cash":175,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Russell","buy":250,"cash":259,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Shimony","buy":100,"cash":75,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-33","name":"Session #33","date":"2026-08-29","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":229,"desc":"Imported house result"}],"players":[{"name":"Ilan","buy":150,"cash":145,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Khan","buy":200,"cash":182,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Parker","buy":200,"cash":191,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-34","name":"Session #34","date":"2026-08-30","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":449,"desc":"Imported house result"}],"players":[{"name":"Josh Davis","buy":225,"cash":206,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Nate","buy":250,"cash":220,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Shechter","buy":200,"cash":206,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Zach","buy":250,"cash":214,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-35","name":"Session #35","date":"2026-08-31","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":200,"desc":"Imported house result"}],"players":[{"name":"Austin","buy":100,"cash":125,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Corbett","buy":300,"cash":345,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Fink","buy":250,"cash":374,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Katz","buy":175,"cash":97,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-36","name":"Session #36","date":"2026-09-01","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":200,"desc":"Imported house result"}],"players":[{"name":"Griffin","buy":100,"cash":98,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Joe","buy":125,"cash":172,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Roytburd","buy":300,"cash":307,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Steck","buy":175,"cash":81,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-37","name":"Session #37","date":"2026-09-02","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":60,"desc":"Imported house result"}],"players":[{"name":"Bellew","buy":125,"cash":143,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Preston","buy":475,"cash":190,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Sam Burgy","buy":200,"cash":191,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-38","name":"Session #38","date":"2026-09-03","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Down","amount":200,"desc":"Imported house result"}],"players":[{"name":"Austin","buy":125,"cash":143,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Ilan","buy":250,"cash":222,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Parker","buy":200,"cash":194,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-39","name":"Session #39","date":"2026-09-04","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Down","amount":500,"desc":"Imported house result"}],"players":[{"name":"Gitken","buy":225,"cash":184,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Ilan","buy":175,"cash":166,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Ty","buy":150,"cash":149,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-40","name":"Session #40","date":"2026-09-05","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":280,"desc":"Imported house result"}],"players":[{"name":"Nate","buy":150,"cash":129,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Shechter","buy":150,"cash":148,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Shimony","buy":175,"cash":150,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Zach","buy":250,"cash":221,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-41","name":"Session #41","date":"2026-09-06","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":30,"desc":"Imported house result"}],"players":[{"name":"Coby","buy":100,"cash":93,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Josh Davis","buy":150,"cash":134,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Julian","buy":175,"cash":171,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-42","name":"Session #42","date":"2026-09-07","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Down","amount":30,"desc":"Imported house result"}],"players":[{"name":"Cooper","buy":125,"cash":136,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Corbett","buy":300,"cash":330,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Katz","buy":300,"cash":206,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Khan","buy":125,"cash":103,"note":"Estimated session allocation from lifetime Notes total"}]},{"id":"import-43","name":"Session #43","date":"2026-09-08","notes":"Imported from Schiller House Notes.","txns":[{"dir":"Up","amount":32,"desc":"Imported house result"}],"players":[{"name":"Griffin","buy":150,"cash":161,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Parker","buy":200,"cash":189,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Russell","buy":300,"cash":307,"note":"Estimated session allocation from lifetime Notes total"},{"name":"Sam Burgy","buy":175,"cash":161,"note":"Estimated session allocation from lifetime Notes total"}]}]};
+let db=JSON.parse(JSON.stringify(SEED_DB));
+let editing=null;
+let chartHover={};
+
+try{
+  const saved=localStorage.getItem(KEY);
+  if(saved){
+    const parsed=JSON.parse(saved);
+    if(parsed && Array.isArray(parsed.sessions)) db=parsed;
+  }
+}catch(e){
+  console.warn('Saved data could not be loaded. The app will use the imported Schiller House data for this tab.', e);
+}
+
+function money(n){
+  n=Number(n)||0;
+  return (n<0?'-$':'$')+Math.abs(Math.round(n)).toLocaleString();
+}
+
+function netTx(t){if(t.dir==='Up')return Number(t.amount)||0;if(t.dir==='Down')return -(Number(t.amount)||0);return 0}
+function sessionNet(s){return (s.txns||[]).reduce((a,t)=>a+netTx(t),0)}
+
+function allPlayers(){
+  const m={};
+  db.sessions.forEach(s=>(s.players||[]).forEach(p=>{
+    const key=String(p.name||'').trim();
+    if(!key) return;
+    const x=m[key]||{name:key,buy:0,cash:0,sessions:0};
+    x.buy+=Number(p.buy)||0;
+    x.cash+=Number(p.cash)||0;
+    x.sessions++;
+    m[key]=x;
+  }));
+  return Object.values(m)
+    .map(x=>({...x,net:x.cash-x.buy}))
+    .sort((a,b)=>b.net-a.net);
+}
+
+function persist(){
+  try{
+    localStorage.setItem(KEY,JSON.stringify(db));
+    return true;
+  }catch(e){
+    console.warn('Local storage is unavailable. Changes will only last while this page is open.', e);
+    return false;
+  }
+}
+
+function tabButton(id){
+  return document.querySelector(`.tab[data-tab="${id}"]`);
+}
+
+function showTab(id,btn){
+  document.querySelectorAll('main>div').forEach(x=>x.classList.add('hidden'));
+  const panel=document.getElementById(id);
+  if(!panel) return;
+  panel.classList.remove('hidden');
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  const activeBtn=btn && btn.classList.contains('tab') ? btn : tabButton(id);
+  if(activeBtn) activeBtn.classList.add('active');
+  if(id==='dashboard')render();
+  if(id==='sessions')renderSessions();
+  if(id==='players')renderPlayers();
+  if(id==='graphs')drawGraph();
+}
+
+function metaTags(s){
+  return `<div class="tagset">
+    <span class="tag">${(s.txns||[]).length} house ${(s.txns||[]).length===1?'entry':'entries'}</span>
+    <span class="tag">${(s.players||[]).length} ${(s.players||[]).length===1?'player':'players'}</span>
+  </div>`;
+}
+
+function render(){
+  const total=db.sessions.reduce((a,s)=>a+sessionNet(s),0);
+  document.getElementById('totalProfit').textContent=money(total);
+  document.getElementById('totalProfit').className='num '+(total>=0?'up':'down');
+  const wins=db.sessions.filter(s=>sessionNet(s)>=0).length;
+  const ratio=db.sessions.length?Math.round((wins/db.sessions.length)*100):0;
+  document.getElementById('profitRatio').textContent=ratio+'%';
+  document.getElementById('profitRatio').className='num '+(ratio>=50?'up':'down');
+  document.getElementById('txnCount').textContent=db.sessions.reduce((a,s)=>a+(s.txns||[]).length,0);
+  document.getElementById('playerCount').textContent=allPlayers().length;
+  document.getElementById('recent').innerHTML=db.sessions.slice().reverse().slice(0,6).map(s=>
+    `<div class="ledger-row" data-session-id="${escAttr(s.id)}">
+      <div class="ledger-main">
+        <div class="ledger-bar ${sessionNet(s)>=0?'up':'down'}"></div>
+        <div><div class="ledger-name">${esc(s.name||'Session')}</div>${metaTags(s)}</div>
+      </div>
+      <div class="ledger-figure num ${sessionNet(s)>=0?'up':'down'}">${money(sessionNet(s))}</div>
+    </div>`
+  ).join('')||'<p class="list-empty">No sessions recorded yet. Start one to open the ledger.</p>';
+  drawCanvas('dashChart','cumulative');
+}
+
+function renderSessions(){
+  document.getElementById('sessionList').innerHTML=db.sessions.slice().reverse().map(s=>
+    `<div class="ledger-row" data-session-id="${escAttr(s.id)}">
+      <div class="ledger-main">
+        <div class="ledger-bar ${sessionNet(s)>=0?'up':'down'}"></div>
+        <div><div class="ledger-name">${esc(s.name||'Session')}</div>${metaTags(s)}</div>
+      </div>
+      <div class="ledger-actions">
+        <div class="ledger-figure num ${sessionNet(s)>=0?'up':'down'}">${money(sessionNet(s))}</div>
+        <button type="button" class="ghost" data-action="open-session" data-id="${escAttr(s.id)}">Open</button>
+        <button type="button" class="danger" data-action="delete-session" data-id="${escAttr(s.id)}">Delete</button>
+      </div>
+    </div>`
+  ).join('')||'<p class="list-empty">No sessions recorded yet. Start one to open the ledger.</p>';
+}
+
+function renderPlayers(){
+  const ps=allPlayers();
+  document.getElementById('playerList').innerHTML=ps.length?
+    `<table><thead><tr><th></th><th>Player</th><th>Sessions</th><th>Buy-ins</th><th>Cash-outs</th><th>Net</th></tr></thead><tbody>${ps.map((p,i)=>
+      `<tr><td class="rank">${i+1}</td><td><strong>${esc(p.name)}</strong></td><td class="num">${p.sessions}</td><td class="num">${money(p.buy)}</td><td class="num">${money(p.cash)}</td><td class="num ${p.net>=0?'up':'down'}"><strong>${money(p.net)}</strong></td></tr>`
+    ).join('')}</tbody></table>`:
+    '<p class="empty-hint">No player data yet. Add players to a session to build the standings.</p>';
+}
+
+function nextSessionName(){
+  return 'Session #'+(db.sessions.length+1);
+}
+
+function newSession(){
+  editing={id:String(Date.now()),name:nextSessionName(),notes:'',txns:[],players:[]};
+  openEditor();
+}
+
+function editSession(id){
+  const found=db.sessions.find(s=>String(s.id)===String(id));
+  if(!found) return;
+  editing=JSON.parse(JSON.stringify(found));
+  openEditor();
+}
+
+function openEditor(){
+  if(!editing) return;
+  document.querySelectorAll('main>div').forEach(x=>x.classList.add('hidden'));
+  document.getElementById('editor').classList.remove('hidden');
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.getElementById('editorTitle').textContent=editing.name||'New session';
+  document.getElementById('sName').value=editing.name||'';
+  document.getElementById('sNotes').value=editing.notes||'';
+  renderPlayerSelect();
+  renderEditor();
+}
+
+function closeEditor(){
+  editing=null;
+  showTab('dashboard',tabButton('dashboard'));
+}
+
+function addTxn(){
+  if(!editing) return;
+  const amount=Number(document.getElementById('tAmt').value);
+  if(!Number.isFinite(amount) || amount<=0){
+    alert('Enter an amount greater than $0.');
+    return;
+  }
+  editing.txns.push({
+    dir:document.getElementById('tDir').value,
+    amount,
+    desc:document.getElementById('tDesc').value.trim()
+  });
+  document.getElementById('tAmt').value='';
+  document.getElementById('tDesc').value='';
+  renderEditor();
+}
+
+function renderPlayerSelect(){
+  const sel=document.getElementById('pName');
+  const current=sel.value;
+  const names=allPlayers().map(p=>p.name).sort((a,b)=>a.localeCompare(b));
+  sel.innerHTML=names.length?
+    names.map(n=>`<option value="${escAttr(n)}">${esc(n)}</option>`).join(''):
+    '<option value="">No players yet — use + to add one</option>';
+  if(names.includes(current)) sel.value=current;
+}
+
+function addNewPlayerName(){
+  const name=(prompt('New player name:')||'').trim();
+  if(!name) return;
+  const sel=document.getElementById('pName');
+  const exists=[...sel.options].some(o=>o.value.toLowerCase()===name.toLowerCase());
+  if(!exists){
+    const opt=document.createElement('option');
+    opt.value=name;
+    opt.textContent=name;
+    sel.appendChild(opt);
+  }
+  sel.value=name;
+}
+
+function addPlayer(){
+  if(!editing) return;
+  const name=document.getElementById('pName').value.trim();
+  const buy=Number(document.getElementById('pBuy').value)||0;
+  const cash=Number(document.getElementById('pCash').value)||0;
+  if(!name){
+    alert('Select a player, or use + to add a new one.');
+    return;
+  }
+  if(buy<0 || cash<0){
+    alert('Buy-in and cash-out cannot be negative.');
+    return;
+  }
+  editing.players.push({name,buy,cash,note:document.getElementById('pNote').value.trim()});
+  ['pBuy','pCash','pNote'].forEach(id=>document.getElementById(id).value='');
+  renderEditor();
+}
+
+function renderEditor(){
+  if(!editing) return;
+  document.getElementById('editNet').textContent=money(sessionNet(editing));
+  document.getElementById('txnEditor').innerHTML=(editing.txns||[]).map((t,i)=>
+    `<div class="entry-row">
+      <span class="pill ${t.dir==='Up'?'up-pill':'down-pill'}">${esc(t.dir)} ${money(t.amount)}</span>
+      <span class="muted" style="flex:1">${esc(t.desc||'')}</span>
+      <button type="button" class="danger" data-action="remove-txn" data-index="${i}">Remove</button>
+    </div>`
+  ).join('');
+  document.getElementById('playerEditor').innerHTML=(editing.players||[]).map((p,i)=>
+    `<div class="entry-row">
+      <span><strong>${esc(p.name)}</strong> — buy ${money(p.buy)}, cash ${money(p.cash)}, net <strong class="${(Number(p.cash)||0)-(Number(p.buy)||0)>=0?'up':'down'}">${money((Number(p.cash)||0)-(Number(p.buy)||0))}</strong></span>
+      <button type="button" class="danger" data-action="remove-player" data-index="${i}">Remove</button>
+    </div>`
+  ).join('');
+}
+
+function saveSession(){
+  if(!editing) return;
+  editing.name=document.getElementById('sName').value.trim()||nextSessionName();
+  editing.notes=document.getElementById('sNotes').value.trim();
+  const index=db.sessions.findIndex(s=>String(s.id)===String(editing.id));
+  if(index===-1) db.sessions.push(editing);
+  else db.sessions[index]=editing;
+  persist();
+  editing=null;
+  showTab('sessions',tabButton('sessions'));
+}
+
+function deleteSession(id){
+  if(confirm('Delete this session? This cannot be undone.')){
+    db.sessions=db.sessions.filter(s=>String(s.id)!==String(id));
+    persist();
+    renderSessions();
+    render();
+  }
+}
+
+function esc(s){
+  return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function escAttr(s){return esc(String(s))}
+
+function drawGraph(){
+  const select=document.getElementById('graphSelect');
+  if(!select) return;
+  drawCanvas('mainChart',select.value);
+}
+
+function series(type){
+  const ss=db.sessions;
+  if(type==='session') return ss.map((s,i)=>({x:s.name||`S${i+1}`,y:sessionNet(s)}));
+  if(type==='players') return allPlayers().map(p=>({x:p.name,y:p.net}));
+  let cumulative=0;
+  return ss.map((s,i)=>({x:s.name||`S${i+1}`,y:cumulative+=sessionNet(s)}));
+}
+
+function drawCanvas(id,type){
+  const c=document.getElementById(id);
+  if(!c || c.closest('.hidden')) return;
+  const ctx=c.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  const w=c.clientWidth;
+  const h=c.clientHeight;
+  if(!w || !h) return;
+  c.width=Math.round(w*dpr);
+  c.height=Math.round(h*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,w,h);
+  const pts=series(type);
+  if(!pts.length){
+    ctx.fillStyle='#7a715e';
+    ctx.font='italic 14px Fraunces, Georgia, serif';
+    ctx.fillText('No data yet — this will fill in once a session is recorded.',16,32);
+    chartHover[id]={points:[]};
+    return;
+  }
+  const pad={l:60,r:16,t:20,b:44};
+  const iw=w-pad.l-pad.r;
+  const ih=h-pad.t-pad.b;
+  const vals=pts.map(p=>p.y);
+  let min=Math.min(0,...vals),max=Math.max(0,...vals);
+  if(min===max){min-=1;max+=1}
+  const pcAdd=(max-min)*0.08;
+  max+=pcAdd; if(min<0) min-=pcAdd;
+  const x=i=>pad.l+(pts.length===1?iw/2:iw*i/(pts.length-1));
+  const y=v=>pad.t+(max-v)/(max-min)*ih;
+
+  ctx.strokeStyle='#e3dac4';
+  ctx.fillStyle='#7a715e';
+  ctx.font='11px Inter, sans-serif';
+  for(let j=0;j<=4;j++){
+    const v=min+(max-min)*j/4, yy=y(v);
+    ctx.beginPath();
+    ctx.setLineDash([3,4]);
+    ctx.moveTo(pad.l,yy);
+    ctx.lineTo(w-pad.r,yy);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillText(money(v),4,yy+4);
+  }
+
+  if(min<0 && max>0){
+    ctx.strokeStyle='#c9c0a8';
+    ctx.beginPath();
+    ctx.moveTo(pad.l,y(0));
+    ctx.lineTo(w-pad.r,y(0));
+    ctx.stroke();
+  }
+
+  const grad=ctx.createLinearGradient(0,pad.t,0,pad.t+ih);
+  grad.addColorStop(0,'rgba(169,127,36,.22)');
+  grad.addColorStop(1,'rgba(169,127,36,0)');
+  ctx.beginPath();
+  pts.forEach((p,i)=>{const xx=x(i),yy=y(p.y);i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy)});
+  ctx.lineTo(x(pts.length-1),y(Math.max(0,min)));
+  ctx.lineTo(x(0),y(Math.max(0,min)));
+  ctx.closePath();
+  ctx.fillStyle=grad;
+  ctx.fill();
+
+  ctx.strokeStyle='#12332b';
+  ctx.lineWidth=2.25;
+  ctx.beginPath();
+  pts.forEach((p,i)=>{const xx=x(i),yy=y(p.y);i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy)});
+  ctx.stroke();
+
+  pts.forEach((p,i)=>{
+    const xx=x(i),yy=y(p.y);
+    ctx.fillStyle=p.y>=0?'#a97f24':'#95392f';
+    ctx.beginPath();
+    ctx.arc(xx,yy,3.5,0,Math.PI*2);
+    ctx.fill();
+    if(pts.length<=24){
+      ctx.fillStyle='#7a715e';
+      ctx.save();
+      ctx.translate(xx,h-16);
+      ctx.rotate(-Math.PI/6);
+      ctx.textAlign='right';
+      ctx.fillText(p.x,0,0);
+      ctx.restore();
+    }
+  });
+
+  chartHover[id]={
+    pad, w, h,
+    points:pts.map((p,i)=>({x:x(i),y:y(p.y),label:p.x,value:p.y}))
+  };
+}
+
+function canvasType(id){
+  return id==='dashChart' ? 'cumulative' : document.getElementById('graphSelect').value;
+}
+
+function setupHover(id,tooltipId){
+  const c=document.getElementById(id);
+  const tip=document.getElementById(tooltipId);
+  if(!c || !tip) return;
+
+  c.addEventListener('mousemove',e=>{
+    const info=chartHover[id];
+    if(!info || !info.points.length) return;
+    const rect=c.getBoundingClientRect();
+    const mx=e.clientX-rect.left;
+    let nearest=info.points[0], bestDist=Math.abs(nearest.x-mx);
+    for(const p of info.points){
+      const d=Math.abs(p.x-mx);
+      if(d<bestDist){bestDist=d;nearest=p;}
+    }
+
+    const type=canvasType(id);
+    drawCanvas(id,type);
+    const fresh=chartHover[id];
+    if(!fresh || !fresh.pad) return;
+
+    const ctx=c.getContext('2d');
+    const dpr=window.devicePixelRatio||1;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.save();
+    ctx.strokeStyle='rgba(18,51,43,.35)';
+    ctx.setLineDash([3,4]);
+    ctx.beginPath();
+    ctx.moveTo(nearest.x,fresh.pad.t);
+    ctx.lineTo(nearest.x,fresh.h-fresh.pad.b);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#fffdf7';
+    ctx.strokeStyle=nearest.value>=0?'#a97f24':'#95392f';
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    ctx.arc(nearest.x,nearest.y,5.5,0,Math.PI*2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+
+    tip.innerHTML=`<span class="tt-label">${esc(nearest.label)}</span><span class="tt-value" style="color:${nearest.value>=0?'#e3bb5a':'#e2897c'}">${money(nearest.value)}</span>`;
+    tip.style.left=nearest.x+'px';
+    tip.style.top=Math.max(nearest.y-14,10)+'px';
+    tip.classList.add('show');
+  });
+
+  c.addEventListener('mouseleave',()=>{
+    tip.classList.remove('show');
+    drawCanvas(id,canvasType(id));
+  });
+}
+
+// One event system for every button, including buttons created later by render functions.
+document.addEventListener('click',event=>{
+  const tab=event.target.closest('[data-tab]');
+  if(tab){
+    showTab(tab.dataset.tab,tab);
+    return;
+  }
+
+  const actionEl=event.target.closest('[data-action]');
+  if(actionEl){
+    event.stopPropagation();
+    const action=actionEl.dataset.action;
+    if(action==='new-session') newSession();
+    else if(action==='close-editor') closeEditor();
+    else if(action==='save-session') saveSession();
+    else if(action==='add-txn') addTxn();
+    else if(action==='add-player') addPlayer();
+    else if(action==='new-player-name') addNewPlayerName();
+    else if(action==='open-session') editSession(actionEl.dataset.id);
+    else if(action==='delete-session') deleteSession(actionEl.dataset.id);
+    else if(action==='remove-txn' && editing){
+      editing.txns.splice(Number(actionEl.dataset.index),1);
+      renderEditor();
+    }
+    else if(action==='remove-player' && editing){
+      editing.players.splice(Number(actionEl.dataset.index),1);
+      renderEditor();
+    }
+    return;
+  }
+
+  const sessionCard=event.target.closest('[data-session-id]');
+  if(sessionCard) editSession(sessionCard.dataset.sessionId);
+});
+
+document.getElementById('graphSelect').addEventListener('change',drawGraph);
+
+// Enter shortcuts make live-game entry faster.
+document.getElementById('tAmt').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addTxn()}});
+document.getElementById('pNote').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addPlayer()}});
+
+window.addEventListener('resize',()=>{
+  if(!document.getElementById('dashboard').classList.contains('hidden')) drawCanvas('dashChart','cumulative');
+  if(!document.getElementById('graphs').classList.contains('hidden')) drawGraph();
+});
+
+render();
+setupHover('dashChart','dashTooltip');
+setupHover('mainChart','mainTooltip');
+</script>
+</body></html>
